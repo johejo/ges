@@ -1,0 +1,65 @@
+openapi: '3.0.2'
+
+info:
+  description: 'Go example service'
+  title: 'ges'
+  version: 'v0'
+
+servers:
+  - url: 'http://localhost:{port}/api/{basePath}'
+    description: 'local server'
+    variables:
+      port:
+        default: '8080'
+      basePath:
+        default: 'v0'
+  - url: 'https://example.johejo.com:{port}/api/{basePath}'
+    description: 'example server'
+    variables:
+      port:
+        default: '443'
+      basePath:
+        default: 'v0'
+
+paths:
+  /messages/{messageId}:
+    get:
+      summary: 'get a message'
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          $ref: '#/components/schemas/I18nText'
+        text:
+          $ref: '#/components/schemas/I18nText'
+
+    I18nText:
+      type: object
+      example:
+        ja: "日本語"
+        en: "English"
+
+    UUID:
+      type: string
+      maxLength: 36
+      minLength: 36
+      example:
+        '52999bd4-2882-4679-bc97-a342c1f4cae5'
